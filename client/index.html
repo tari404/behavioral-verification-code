@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>测试</title>
+</head>
+<body>
+  <label for="phone">手机号</label>
+  <input id="phone" type="text">
+  <button onclick="gen()">获取验证码</button>
+</body>
+<style>
+.box {
+  position: relative;
+}
+.active-logo {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+<script>
+function gen () {
+  fetch('http://localhost:3000/generate', {
+    body: JSON.stringify({
+      phone: document.querySelector('#phone').value
+    }),
+    cache: 'no-cache',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST'
+  }).then(res => {
+    if (res.status === 200) {
+      return res.json()
+    } else {
+      return res.text()
+    }
+  }).then(data => {
+    console.log(data)
+    if (data.hash) {
+      runder(data)
+    } else {
+      alert(data)
+    }
+  })
+}
+
+function check (hash, x, y) {
+  fetch('http://localhost:3000/validate', {
+    body: JSON.stringify({ hash, x, y }),
+    cache: 'no-cache',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST'
+  }).then(res => {
+    if (res.status === 200) {
+      return res.json()
+    } else {
+      return res.text()
+    }
+  }).then(data => {
+    console.log(data)
+    if (data.success) {
+      alert('验证成功')
+    } else if (data.times) {
+      alert('验证失败，第' + data.times + '次尝试')
+    } else {
+      alert('验证失败：' + data)
+    }
+  })
+}
+
+const hash = []
+
+const logos = []
+const logoX = []
+const logoY = []
+function runder (data) {
+  hash.push(data.hash)
+
+  const div = document.createElement('div')
+  div.className = 'box'
+  div.onmousedown = mousedownFunc(logos.length)
+
+  const img = new Image()
+  img.src = data.img
+  img.ondragstart = () => false
+
+  const logo = new Image()
+  logo.src = '/assets/logo.png'
+  logo.className = 'active-logo'
+  logo.ondragstart = () => false
+  logos.push(logo)
+  logoX.push(0)
+  logoY.push(0)
+
+  div.appendChild(img)
+  div.appendChild(logo)
+  document.body.append(div)
+}
+
+let lastX, lastY
+let moveIndex = -1
+function mousedownFunc (index) {
+  return (e) => {
+    lastX = e.pageX
+    lastY = e.pageY
+    moveIndex = index
+  }
+}
+document.addEventListener('mousemove', (e) => {
+  if (moveIndex < 0) {
+    return
+  }
+  else {
+    let x = e.pageX - lastX + logoX[moveIndex]
+    x = Math.max(Math.min(x, 325), 0)
+    let y = e.pageY - lastY + logoY[moveIndex]
+    y = Math.max(Math.min(y, 225), 0)
+    logoX[moveIndex] = x
+    logoY[moveIndex] = y
+    logos[moveIndex].style.transform = `translate3d(${x}px, ${y}px, 0)`
+    lastX = e.pageX
+    lastY = e.pageY
+  }
+})
+document.addEventListener('mouseup', (e) => {
+  if (moveIndex < 0) {
+    return
+  }
+  console.log(logoX[moveIndex], logoY[moveIndex])
+  check(hash[moveIndex], logoX[moveIndex], logoY[moveIndex])
+  moveIndex = -1
+})
+</script>
+</html>

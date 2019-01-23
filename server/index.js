@@ -79,8 +79,6 @@ app.post('/generate', (req, res) => {
       phoneNumRec.set(phoneNum, { time: now, hash })
       res.send({
         hash,
-        x,
-        y,
         img: jpeg
       })
     }
@@ -100,7 +98,6 @@ app.post('/validate', (req, res) => {
     return res.status(400).send('verification code expiration')
   }
   const d2 = Math.pow(Number(data.x) - record.x, 2) +  Math.pow(Number(data.y) - record.y, 2)
-  console.log(d2)
   if (d2 < 25) {
     res.send({
       success: true,
