@@ -12,11 +12,17 @@
   "author": "Felix",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.3.1"
+    "@types/commander": "^2.12.2",
+    "@types/express": "^4.16.1",
+    "body-parser": "^1.18.3",
+    "canvas": "^2.3.1",
+    "commander": "^2.19.0",
+    "express": "^4.16.4"
   },
   "eslintConfig": {
     "root": true,
     "env": {
+      "browser": true,
       "node": true
     },
     "rules": {},
