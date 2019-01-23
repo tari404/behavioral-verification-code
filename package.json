@@ -1,0 +1,32 @@
+{
+  "name": "behavioral-verification-code",
+  "version": "1.0.0",
+  "description": "A behavioral verification code demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "verification-code"
+  ],
+  "author": "Felix",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.3.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
