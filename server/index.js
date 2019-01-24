@@ -36,10 +36,10 @@ function genImage () {
   const canvas = createCanvas(400, 300)
   const ctx = canvas.getContext('2d')
   ctx.drawImage(bgImages[0], 0, 0, 400, 300)
-  const rX = Math.round(Math.random() * (400 - 100)) + 12
-  const rY = Math.round(Math.random() * (300 - 160)) + 12
+  const rX = Math.round(Math.random() * (400 - 140)) + 10
+  const rY = Math.round(Math.random() * (300 - 170)) + 10
   ctx.globalAlpha = .4
-  ctx.drawImage(logo, rX, rY, 75, 75)
+  ctx.drawImage(logo, rX, rY, 120, 120)
   console.log(`-- gen image: x: ${rX}, y: ${rY}`)
   return {
     x: rX,
@@ -56,7 +56,7 @@ app.post('/generate', (req, res) => {
   }
   if (phoneNumRec.has(phoneNum)) {
     const record = phoneNumRec.get(phoneNum)
-    if (record.time > new Date().getTime() - 60000) {
+    if (record.time > new Date().getTime() - 10000) {
       return res.status(400).send('requests are too frequent')
     } else {
       storage.delete(record.hash)

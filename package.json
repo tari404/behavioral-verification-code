@@ -27,7 +27,8 @@
     },
     "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "babel-eslint",
+      "ecmaVersion": 6
     }
   },
   "browserslist": [
