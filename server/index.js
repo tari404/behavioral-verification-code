@@ -51,7 +51,7 @@ function genImage () {
 app.post('/generate', (req, res) => {
   const data = req.body
   const phoneNum = data.phone
-  if (!phoneNum || !/^\d{11}$/.test(phoneNum)) {
+  if (!phoneNum) {
     return res.status(400).send('invalid argument: phone')
   }
   if (phoneNumRec.has(phoneNum)) {
